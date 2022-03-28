@@ -1,9 +1,9 @@
-import axios from 'axios';
-import proxy from '../config/proxy';
+import axios from "axios";
+// import proxy from "../config/proxy";
 
-const env = import.meta.env.MODE || 'development';
+// const env = import.meta.env.MODE || "development";
 
-const host = env === 'mock' ? '/' : proxy[env].host; // 如果是mock模式 就不配置host 会走本地Mock拦截
+// const host = env === "mock" ? "/" : proxy[env].host; // 如果是mock模式 就不配置host 会走本地Mock拦截
 
 const CODE = {
   LOGIN_TIMEOUT: 1000,
@@ -12,7 +12,7 @@ const CODE = {
 };
 
 const instance = axios.create({
-  baseURL: host,
+  baseURL: "/cweb",
   timeout: 1000,
   withCredentials: true,
 });
@@ -51,7 +51,7 @@ instance.interceptors.response.use(
     });
 
     return backoff.then(() => instance(config));
-  },
+  }
 );
 
 export default instance;

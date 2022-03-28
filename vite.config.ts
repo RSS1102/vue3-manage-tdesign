@@ -1,17 +1,17 @@
-import { defineConfig } from 'vite';
-import { viteMockServe } from 'vite-plugin-mock';
-import createVuePlugin from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-import svgLoader from 'vite-svg-loader';
+import { defineConfig } from "vite";
+import { viteMockServe } from "vite-plugin-mock";
+import createVuePlugin from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import svgLoader from "vite-svg-loader";
 
-import path from 'path';
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
+  base: "./",
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 
@@ -19,17 +19,19 @@ export default defineConfig({
     createVuePlugin(),
     vueJsx(),
     viteMockServe({
-      mockPath: 'mock',
+      mockPath: "mock",
       localEnabled: true,
     }),
     svgLoader(),
   ],
 
   server: {
-    port: 3002,
-    host: '0.0.0.0',
     proxy: {
-      '/api': 'http://127.0.0.1:3000/',
+      "/cweb": {
+        target: "http://localhost:3003/cweb/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cweb/, ""),
+      },
     },
   },
 });

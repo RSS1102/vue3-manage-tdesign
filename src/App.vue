@@ -2,9 +2,10 @@
   <router-view :class="[mode]" />
 </template>
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import config from '@/config/style';
-import { useSettingStore } from '@/store';
+import { computed, onMounted } from "vue";
+import config from "@/config/style";
+import { useSettingStore } from "@/store";
+import { test } from "@/api/blogs";
 
 const store = useSettingStore();
 
@@ -13,11 +14,12 @@ const mode = computed(() => {
 });
 
 onMounted(() => {
+  test();
   store.updateConfig({ ...config });
 });
 </script>
 <style lang="less">
-@import '@/style/variables.less';
+@import "@/style/variables.less";
 
 #nprogress .bar {
   background: @brand-color !important;

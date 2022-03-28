@@ -3,13 +3,13 @@ declare type ClassName = { [className: string]: any } | ClassName[] | string;
 
 declare interface ImportMeta {
   env: {
-    MODE: 'mock' | 'development' | 'test' | 'release';
+    MODE: "mock" | "development" | "test" | "release";
   };
   // eslint-disable-next-line no-unused-vars
-  glob: (url: string) => { url };
+  glob: (url: string) => { url: any };
 }
 
-declare module '*.svg' {
+declare module "*.svg" {
   const CONTENT: string;
   export default CONTENT;
 }

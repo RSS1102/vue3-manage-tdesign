@@ -1,4 +1,4 @@
-import STYLE_CONFIG from '@/config/style';
+import STYLE_CONFIG from "@/config/style";
 
 export interface ResDataType {
   code: number;
@@ -9,16 +9,16 @@ export interface MenuRoute {
   path: string;
   title?: string;
   icon?:
-    | string
-    | {
-        render: () => void;
-      };
+  | string
+  | {
+    render: () => void;
+  };
   redirect?: string;
   children: MenuRoute[];
   meta: any;
 }
 
-export type ModeType = 'dark' | 'light';
+export type ModeType = "dark" | "light";
 
 export type SettingType = typeof STYLE_CONFIG;
 
