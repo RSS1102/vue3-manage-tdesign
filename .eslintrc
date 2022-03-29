@@ -36,6 +36,10 @@
     ]
   },
   "rules": {
+    "editor.formatOnSave": true,
+    // #每次保存的时候将代码按eslint格式进行修复
+    "eslint.autoFixOnSave": true,
+    "prettier.eslintIntegration": true,
     "no-console": "off",
     "no-continue": "off",
     "no-restricted-syntax": "off",

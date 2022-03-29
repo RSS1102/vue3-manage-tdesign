@@ -5,7 +5,6 @@
 import { computed, onMounted } from "vue";
 import config from "@/config/style";
 import { useSettingStore } from "@/store";
-import { test } from "@/api/blogs";
 
 const store = useSettingStore();
 
@@ -14,7 +13,6 @@ const mode = computed(() => {
 });
 
 onMounted(() => {
-  test();
   store.updateConfig({ ...config });
 });
 </script>

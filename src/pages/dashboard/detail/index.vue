@@ -51,7 +51,7 @@
           range
           @change="onSatisfyChange"
         />
-        <t-button class="card-date-button"> 导出数据 </t-button>
+        <t-button class="card-date-button">导出数据</t-button>
       </template>
       <div id="scatterContainer" style="width: 100%; height: 330px" />
     </card>
@@ -150,5 +150,5 @@ const onMaterialChange = (value: string[]) => {
 };
 </script>
 <style lang="less" scoped>
-@import url('./index.less');
+@import url("./index.less");
 </style>

@@ -20,7 +20,7 @@ export const delblognav = (data) => {
     data,
   });
 };
-export const upblogmenu = (data) => {
+export const upblognav = (data) => {
   return axios({
     url: "/cweb/blogs/upblogmenu",
     method: "post",
