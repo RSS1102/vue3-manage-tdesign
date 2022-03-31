@@ -1,6 +1,8 @@
 import Layout from '@/layouts';
 import ListIcon from '@/assets/assets-slide-list.svg';
-
+import { defineAsyncComponent } from 'vue';
+const blogcont = () => import('../../pages/workarea/blogcont/index.vue');
+const blogs = () => import('../../pages/workarea/blogs/index.vue');
 export default [
   {
     path: '/workarea',
@@ -12,13 +14,13 @@ export default [
       {
         path: 'blogcont',
         name: 'blogcont',
-        component: () => import('@/pages/workarea/blogcont/index.vue'),
+        component: blogcont,
         meta: { title: '博客管理' },
       },
       {
         path: 'blogs',
         name: 'blogs',
-        component: () => import('@/pages/workarea/blogs/index.vue'),
+        component: blogs,
         meta: { title: '博客发布' },
       },
     ],
