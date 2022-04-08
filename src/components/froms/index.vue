@@ -13,57 +13,84 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { getBlogs } from "@/api/blogs"
+import { Interface } from 'readline';
+import { changeChartsTheme } from '@/pages/dashboard/base';
+
+/**
+ * data请求到的数据 []
+ * columns表格标题 []
+ * isLoading是否加载中  Boolean
+ * pagination 分页{}
+ */
 
 const columns = [
   {
-    width: 200,
-    colKey: 'name',
-    title: '姓名',
-    render(h, { row: { name } }) {
-      return name ? `${name.first} ${name.last}` : 'UNKNOW_USER';
-    },
+    width: 15,
+    colKey: 'id',
+    title: 'ID',
   },
   {
-    width: 200,
-    colKey: 'gender',
-    title: '性别',
+    width: 30,
+    colKey: 'navindex',
+    title: 'NavIndex',
   },
   {
-    width: 200,
-    colKey: 'phone',
-    title: '联系方式',
-    render(h, { row: { phone } }) {
-      return phone;
-    },
+    width: 50,
+    colKey: 'title',
+    title: 'title',
   },
   {
-    colKey: 'email',
-    title: '邮箱',
+    width: 30,
+    colKey: 'updatedAt',
+    title: 'updated-time',
+  },
+  {
+    width: 30,
+    colKey: 'createdAt',
+    title: 'created-time',
+  },
+  {
+    width: 20,
+    colKey: 'visited',
+    title: '浏览人数',
+  },
+  {
+    width: 10,
+    colKey: '',
+    title: '是否隐藏',
+  },
+  {
+    width: 10,
+    colKey: '',
+    title: '编辑',
   },
 ];
+interface response {
+  rows: number
+  count: Array<string>,
+
+}
 
 const data = ref([]);
 const isLoading = ref(false);
 // 数据总条数
-const total = 120;
+const total = null;
 const pagination = ref({
-  current: 1,
+  current: 0,
   pageSize: 10,
   total,
 });
 
-const fetchData = async (paginationVal = pagination.value) => {
+const fetchData = async (pagination: { current: number; pageSize: number; total: any; }) => {
   try {
     isLoading.value = true;
-    const { current, pageSize } = pagination.value;
-    // 请求可能存在跨域问题
-    const response = await fetch(`https://randomuser.me/api?page=${current}&results=${pageSize}`);
-    const { results } = await response.json();
-    console.log('请求到的数据', results);
-    data.value = results;
-    pagination.value = {
-      ...paginationVal,
-    };
+    const { current, pageSize } = pagination;
+    let prams = { offset: current, limit: pageSize, navindex: "" }
+    const results = await getBlogs(prams);
+    console.log('请求到的数据', results.data,);
+    data.value = results.data.rows;
+    pagination.total = results.data.count;
     console.log('分页数据', results);
   } catch (err) {
     console.log(err);
@@ -71,8 +98,12 @@ const fetchData = async (paginationVal = pagination.value) => {
   }
   isLoading.value = false;
 };
-
-const rehandleChange = async (changeParams, triggerAndData) => {
+interface changeParamsType {
+  pagination: {
+    current: number; pageSize: number;
+  };
+}
+const rehandleChange = async (changeParams: changeParamsType, triggerAndData: []) => {
   console.log('分页、排序、过滤等发生变化时会触发 change 事件：', changeParams, triggerAndData);
   const { current, pageSize } = changeParams.pagination;
   const pagination = { current, pageSize, total };

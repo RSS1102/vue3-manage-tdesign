@@ -14,9 +14,9 @@
         <t-radio-group v-model="formData.mode">
           <div v-for="(item, index) in MODE_OPTIONS" :key="index" class="setting-layout-drawer">
             <div>
-              <t-radio-button :key="index" :value="item.type"
-                ><component :is="getModeIcon(item.type)"
-              /></t-radio-button>
+              <t-radio-button :key="index" :value="item.type">
+                <component :is="getModeIcon(item.type)" />
+              </t-radio-button>
               <p :style="{ textAlign: 'center', marginTop: '8px' }">{{ item.text }}</p>
             </div>
           </div>
@@ -85,7 +85,7 @@
       </t-form>
       <div class="setting-info">
         <p>请复制后手动修改配置文件: /src/config/style.ts</p>
-        <t-button theme="primary" variant="text" @click="handleCopy"> 复制配置项 </t-button>
+        <t-button theme="primary" variant="text" @click="handleCopy">复制配置项</t-button>
       </div>
     </div>
   </t-drawer>
@@ -229,7 +229,7 @@ watchEffect(() => {
 });
 </script>
 <style lang="less">
-@import '@/style/variables';
+@import "@/style/variables";
 .hu-color-picker {
   width: 220px !important;
 }
@@ -238,7 +238,8 @@ watchEffect(() => {
   position: fixed;
   bottom: 200px;
   right: 0;
-  transition: transform 0.3s cubic-bezier(0.7, 0.3, 0.1, 1), visibility 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
+  transition: transform 0.3s cubic-bezier(0.7, 0.3, 0.1, 1),
+    visibility 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
   height: 40px;
   width: 40px;
   border-radius: 20px 0 0 20px;
