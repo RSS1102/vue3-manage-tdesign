@@ -17,29 +17,23 @@
         </t-button>
       </div>
     </div>
-    <oper-dialog :isShow="isShow"></oper-dialog>
-    <t-table
-      :data="data"
-      :columns="columns"
-      :row-key="rowKey"
-      :vertical-align="verticalAlign"
-      :loading="isLoading"
-      :pagination="pagination"
-      bordered
-      stripe
-      @change="rehandleChange"
-    />
+    <oper-dialog :isShow="isShow" @closedialog="closeChildDialog"></oper-dialog>
+    <t-table :data="data" :columns="columns" :row-key="rowKey" :vertical-align="verticalAlign" :loading="isLoading"
+      :pagination="pagination" bordered stripe @change="rehandleChange" />
   </div>
 </template>
 <script  setup lang="ts">
 import { getBlogs } from "@/api/blogs"
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref } from "vue";
 import { getBlognav, } from "@/api/blogsnav"
 import operDialog from "@/pages/workarea/blogcont/operDialog.vue"
 
 let isShow = ref(false)
 const operIsShow = () => {
   isShow.value = true
+}
+const closeChildDialog = () => {
+  isShow.value = false
 }
 let navOptions = ref()
 const initNva = () => {
@@ -171,6 +165,7 @@ const verticalAlign = 'top';
   justify-content: space-between;
   align-items: center;
 }
+
 .oper-btn,
 .t-sel-form {
   border-radius: 5px;
@@ -178,6 +173,7 @@ const verticalAlign = 'top';
   padding: 25px 50px;
   background: #fff;
 }
+
 .oper-btn .t-button {
   padding: 20px;
   margin: -5px 0;

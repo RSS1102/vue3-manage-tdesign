@@ -1,40 +1,44 @@
 <template>
   <div class="oper-dailog">
-    <t-dialog theme="info" header="编辑" :visible.sync="porps.isShow" :on-cancel="() => (isShow = false)">
+    <t-dialog theme="info" header="编辑" :visible.sync="porps.isShow" :on-cancel="closeDialog" :confirm-btn="null"
+      :on-close="closeDialog">
       <div class="add-del-form">
         <t-form ref="form" :data="addData" :colon="true" @submit="addShow = true" class="t-form-add">
           <t-form-item label="添加导航" name="navindex">
             <t-input v-model="addData.navindex" placeholder="请输入navindex" clearable />
-            <t-button theme="primary" type="submit">添加</t-button>
+            <t-popconfirm theme="default" :content="'确定添加:' + addData.navindex">
+              <t-button theme="primary" type="submit">添加</t-button>
+            </t-popconfirm>
           </t-form-item>
+
         </t-form>
         <t-form ref="form" :data="delData" :colon="true" @submit="delShow = true" class="t-form-del">
           <t-form-item label="删除导航" name="navindex">
-            <t-select
-              v-model="delData.id"
-              :options="navOptions"
-              :keys="{ label: 'navindex', value: 'id' }"
-              placeholder="请选择navindex"
-              clearable
-            />
-            <t-button theme="primary" type="submit">删除</t-button>
+            <t-select v-model="delData.id" :options="navOptions" :keys="{ label: 'navindex', value: 'id' }"
+              placeholder="请选择navindex" clearable />
+            <t-popconfirm theme="default" :content="'确定删除:' + delData.navindex">
+              <t-button theme="primary" type="submit">删除</t-button>
+            </t-popconfirm>
           </t-form-item>
+
         </t-form>
       </div>
-      <t-form ref="form" :data="upDataId" :colon="true" @submit="upShow = true" class="t-form-up">
+      <t-form ref="form" :data="upDataId" :colon="true" @submit="upShow = true" class="up-form">
         <t-form-item label="修改导航" name="navindex">
-          <t-select
-            v-model="upDataId.id"
-            :options="navOptions"
-            :keys="{ label: 'navindex', value: 'id' }"
-            placeholder="请选择navindex"
-            clearable
-          />
-          <t-icon name="swap" size="35px" />
-          <t-input v-model="upData.navindex" placeholder="请输入navindex" clearable />
-          <t-button theme="primary" type="submit">修改</t-button>
+          <t-select v-model="upDataId.id" :options="navOptions" :keys="{ label: 'navindex', value: 'id' }"
+            placeholder="请选择navindex" clearable />
         </t-form-item>
+        <t-icon name="swap" size="35px" />
+        <t-form-item label="修改为" name="navindex">
+          <t-input v-model="upData.navindex" placeholder="请输入navindex" clearable />
+        </t-form-item>
+        <t-popconfirm theme="default" :content="'确定修改:' + upData.navindex">
+          <t-button theme="primary" type="submit">修改</t-button>
+        </t-popconfirm>
       </t-form>
+
+
+
       <!-- <t-dialog
         :visible.sync="addShow"
         theme="info"
@@ -47,6 +51,8 @@
           <span class="dialog-body">{{ addData.navindex }}</span>
         </template>
       </t-dialog>
+
+
       <t-dialog
         theme="info"
         header="提示"
@@ -68,22 +74,28 @@
         </template>
       </t-dialog>-->
     </t-dialog>
+
   </div>
 </template>
 <script  setup lang="ts">
 import { reactive, ref } from "vue";
 import { MessagePlugin } from "tdesign-vue-next";
 import { getBlognav, addBlogNav, upBlognav, delBlognav } from "@/api/blogsnav"
-
 let addShow = ref(false)
 let delShow = ref(false)
 let upShow = ref(false)
-let porps = defineProps({
+const porps = defineProps({
   isShow: {
     type: Boolean,
-    default: true
+    default: false
   }
 })
+// 利用defineEmits子传父，进行改变取消弹窗
+const emit = defineEmits(["closedialog"])
+const closeDialog = () => {
+  emit('closedialog')
+}
+
 let navOptions = ref()
 const initNva = () => {
   getBlognav().then(res => {
@@ -140,12 +152,28 @@ const upSubmit = () => {
 </script>
 <style lang="less" scoped>
 .oper-dailog :deep(.t-dialog) {
-  width: 40vw;
-  height: 40vh;
+  width: 800px;
+  height: 400px;
 }
 
-.add-del-form {
+.add-del-form,
+.up-form {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.t-form-add .t-button {
+  margin-left: 5px;
+}
+
+.t-form-del .t-button {
+  margin-left: 15px;
+}
+
+
+.oper-dailog :deep(.t-select),
+.oper-dailog :deep(.t-input) {
+  width: 180px
 }
 </style>
