@@ -1,7 +1,10 @@
 <template>
   <div class="login-wrapper">
-    <div>123</div>
+    <tin-ymce />
   </div>
 </template>
-<script setup lang="ts"></script>
-<syle lang="less"></syle>
+<script setup lang="ts">
+import tinYmce from './tinymce.vue';
+</script>
+<syle lang="less">
+</syle>

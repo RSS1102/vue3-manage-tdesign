@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="edit-button">
-      <t-form ref="form" :data="getData" :colon="true" class="t-sel-form">
+      <t-form ref="form" :data="getDate" :colon="true" class="t-sel-form">
         <t-form-item label="查找导航" name="navindex">
-          <t-select v-model="getData.navindex" placeholder="请选择navindex" clearable @change="fetchData">
+          <t-select v-model="getDate.navindex" placeholder="请选择navindex" clearable @change="fetchData">
             <t-option v-for="item in navOptions" :key="item.navindex" :value="item.navindex"></t-option>
           </t-select>
         </t-form-item>
@@ -19,12 +19,12 @@
     </div>
     <oper-dialog :isShow="isShow" @closedialog="closeChildDialog"></oper-dialog>
     <t-table :data="data" :columns="columns" :row-key="rowKey" :vertical-align="verticalAlign" :loading="isLoading"
-      :pagination="pagination" bordered stripe @change="rehandleChange" />
+      :pagination="pagination" :total="total" bordered stripe @change="rehandleChange" />
   </div>
 </template>
 <script  setup lang="ts">
 import { getBlogs } from "@/api/blogs"
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { getBlognav, } from "@/api/blogsnav"
 import operDialog from "@/pages/workarea/blogcont/operDialog.vue"
 
@@ -36,12 +36,12 @@ const closeChildDialog = () => {
   isShow.value = false
 }
 let navOptions = ref()
-const initNva = () => {
-  getBlognav().then(res => {
-    console.log(res.data)
-    navOptions.value = res.data
-  })
-}
+// const initNva = () => {}
+getBlognav().then(res => {
+  console.log(res.data)
+  navOptions.value = res.data
+})
+
 interface NavType {
   id: number,
   navindex: string
@@ -50,9 +50,9 @@ const INITIAL_DATA: NavType = {
   id: null,
   navindex: ''
 }
-// initNva()
 
-const getData: NavType = reactive({ ...INITIAL_DATA });
+
+const getDate: NavType = reactive({ ...INITIAL_DATA });
 
 
 /**
@@ -111,24 +111,22 @@ interface response {
 
 const data = ref([]);
 const isLoading = ref(false);
-// 数据总条数
-const total = null;
+let total = ref(null);
 const pagination = ref({
   current: 0,
   pageSize: 10,
-  total,
 });
 
-const fetchData = async (pagination: { current: number; pageSize: number; total: any; }) => {
-  console.log(getData)
+const fetchData = async (pagination: { current: number; pageSize: number; }, total: number) => {
+  console.log(getDate)
   try {
     isLoading.value = true;
     const { current, pageSize } = pagination;
-    let prams = { offset: current, limit: pageSize, navindex: getData.navindex }
+    let prams = { offset: current, limit: pageSize, navindex: getDate.navindex }
     const results = await getBlogs(prams);
     console.log('请求到的数据', results.data,);
     data.value = results.data.rows;
-    pagination.total = results.data.count;
+    total = results.data.count;
     console.log('分页数据', results);
   } catch (err) {
     console.log(err);
@@ -145,12 +143,12 @@ const rehandleChange = async (changeParams: changeParamsType, triggerAndData: []
   console.log('分页、排序、过滤等发生变化时会触发 change 事件：', changeParams, triggerAndData);
   const { current, pageSize } = changeParams.pagination;
   const pagination = { current, pageSize, total };
-  await fetchData(pagination);
+  await fetchData(pagination, total);
 };
 
-// onMounted(async () => {
-//   await fetchData(pagination.value);
-// });
+onMounted(async () => {
+  await fetchData(pagination.value, total);
+});
 
 const rowKey = 'property';
 const verticalAlign = 'top';
